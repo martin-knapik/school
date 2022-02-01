@@ -78,49 +78,43 @@ type Remote = {
 type CourseLocation = Classroom | Remote;
 
 
-export class Course {
-  private _id: number;
-  private _name: string;
-  private _student: Student;
-  private _accepted: boolean;
-
-  constructor(id: number, name: string, student: Student, accepted: boolean) {
-    this._id = id;
-    this._name = name;
-    this._student = student;
-    this._accepted = accepted;
-  }
-
-  public get name() {
-    return this._name;
-  }
-
-  public get accepted() {
-    return this._accepted;
-  }
+export type Course = {
+  id: number;
+  name: string;
+  student: Student;
+  accepted: boolean;
 }
 
 export const isAccepted = (course: Course): boolean => {
   return course.accepted;
 }
 
-class BozpCourse extends Course implements Classroom, PointsRequirements {
+class BozpCourse implements Course, Classroom, PointsRequirements {
   locationType: LocationType.Classroom = LocationType.Classroom;
   completionRequirementsType: CompletionRequirementsType.Points = CompletionRequirementsType.Points;
   hasRequirements: true = true;
 
   requiredPoints: number;
   currentPoints: number;
+  accepted: boolean;
+  id: number;
+  name: string;
+  student: Student;
 
   constructor(id: number, name: string, student: Student, accepted: boolean, requiredPoints: number, currentPoints: number) {
-    super(id, name, student, accepted);
+    makeAutoObservable(this);
+    this.id = id;
+    this.name = name;
+    this.student = student;
+    this.accepted = accepted;
     this.requiredPoints = requiredPoints;
     this.currentPoints = currentPoints;
   }
+
   get canBeCompleted() {
-       const x = this.requiredPoints === this.currentPoints;
-       console.log(x);
-       return x;
+    const x = this.requiredPoints === this.currentPoints;
+    console.log(x);
+    return x;
   }
 
   setCurrentPoints = (newCurrentPoints: number) => {
@@ -131,30 +125,62 @@ class BozpCourse extends Course implements Classroom, PointsRequirements {
   }
 }
 
-class EnglishCourse extends Course implements Remote, FinalTestRequirements {
+class EnglishCourse implements Course, Remote, FinalTestRequirements {
   locationType: LocationType.Remote = LocationType.Remote;
   completionRequirementsType: CompletionRequirementsType.FinalTest = CompletionRequirementsType.FinalTest;
   hasRequirements: true = true;
+  accepted: boolean;
+  id: number;
+  name: string;
+  student: Student;
 
   canBeCompleted = true;
+
+  constructor(id: number, name: string, student: Student, accepted: boolean) {
+    makeAutoObservable(this);
+    this.id = id;
+    this.name = name;
+    this.accepted = accepted;
+    this.student = student;
+  }
 }
 
-class FrenchCourse extends Course implements Remote, FinalTestRequirements {
+class FrenchCourse implements Course, Remote, FinalTestRequirements {
   locationType: LocationType.Remote = LocationType.Remote;
   completionRequirementsType: CompletionRequirementsType.FinalTest = CompletionRequirementsType.FinalTest;
   hasRequirements: true = true;
+  accepted: boolean;
+  id: number;
+  name: string;
+  student: Student;
 
   canBeCompleted = true;
+
+  constructor(id: number, name: string, student: Student, accepted: boolean) {
+    makeAutoObservable(this);
+    this.id = id;
+    this.name = name;
+    this.student = student;
+    this.accepted = accepted;
+  }
 }
 
-class ProgrammingCourse extends Course implements Remote, WorkRequirements {
+class ProgrammingCourse implements Course, Remote, WorkRequirements {
   locationType: LocationType.Remote = LocationType.Remote;
   completionRequirementsType: CompletionRequirementsType.Work = CompletionRequirementsType.Work;
   hasRequirements: true = true;
   workSubmitted: boolean;
+  accepted: boolean;
+  id: number;
+  name: string;
+  student: Student;
 
   constructor(id: number, name: string, student: Student, accepted: boolean, workSubmitted: boolean) {
-    super(id, name, student, accepted);
+    makeAutoObservable(this);
+    this.id = id;
+    this.name = name;
+    this.student = student;
+    this.accepted = accepted;
     this.workSubmitted = workSubmitted;
   }
 
@@ -163,13 +189,21 @@ class ProgrammingCourse extends Course implements Remote, WorkRequirements {
   }
 }
 
-class DrawingCertification extends Course implements WorkRequirements {
+class DrawingCertification implements Course, WorkRequirements {
   completionRequirementsType: CompletionRequirementsType.Work = CompletionRequirementsType.Work;
   hasRequirements: true = true;
   workSubmitted: boolean;
+  accepted: boolean;
+  id: number;
+  name: string;
+  student: Student;
 
   constructor(id: number, name: string, student: Student, accepted: boolean, workSubmitted: boolean) {
-    super(id, name, student, accepted);
+    makeAutoObservable(this);
+    this.id = id;
+    this.name = name;
+    this.student = student;
+    this.accepted = accepted;
     this.workSubmitted = workSubmitted;
   }
 
@@ -179,25 +213,37 @@ class DrawingCertification extends Course implements WorkRequirements {
 }
 
 
-class SpeakingInPublicCourse extends Course implements Classroom {
-  locationType: LocationType.Classroom = LocationType.Classroom
+class SpeakingInPublicCourse implements Course, Classroom {
+  locationType: LocationType.Classroom = LocationType.Classroom;
+  accepted: boolean;
+  id: number;
+  name: string;
+  student: Student;
+
+  constructor(id: number, name: string, student: Student, accepted: boolean) {
+    makeAutoObservable(this);
+    this.id = id;
+    this.name = name;
+    this.student = student;
+    this.accepted = accepted;
+  }
 }
 
 export const Courses = new (class {
-  public courses: Course[];
+    public courses: Course[];
 
-  constructor() {
-    makeAutoObservable(this);
-    const student1 = new Student(1, "Jozko");
-    const student2 = new Student(2, "Ferko");
+    constructor() {
+      makeAutoObservable(this);
+      const student1 = new Student(1, "Jozko");
+      const student2 = new Student(2, "Ferko");
 
-    this.courses = [
-      new BozpCourse(1, "BOZP 1", student1, true, 20, 10),
-      new BozpCourse(2, "BOZP 2", student1, false, 20, 0),
-      new BozpCourse(3, "BOZP 2", student2, true, 20, 5),
-      new EnglishCourse(4, "FCE English", student2, false),
-      new ProgrammingCourse(5, "C# Programming", student1, true, false),
-      new SpeakingInPublicCourse(6, "Preparation for conferences", student1, true),
-    ]
-  }
-})();
+      this.courses = [
+        new BozpCourse(1, "BOZP 1", student1, true, 20, 10),
+        new BozpCourse(2, "BOZP 2", student1, false, 20, 0),
+        new BozpCourse(3, "BOZP 2", student2, true, 20, 5),
+        new EnglishCourse(4, "FCE English", student2, false),
+        new ProgrammingCourse(5, "C# Programming", student1, true, false),
+        new SpeakingInPublicCourse(6, "Preparation for conferences", student1, true),
+      ]
+    }
+  })();
