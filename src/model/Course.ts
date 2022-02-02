@@ -1,25 +1,17 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 
-type DayNumber = 1 | 2 | 3 | 4 | 5;
+export type DayNumber = 1 | 2 | 3 | 4 | 5;
 
 type CourseTime = {
   day: DayNumber;
   hour: number;
 }
 
+export const Days: DayNumber[] = [1, 2, 3, 4, 5];
+
 export const createCourseTime = (day: DayNumber, hour: number): CourseTime => ({day, hour});
 
 export const isSameTime = (courseTime1: CourseTime, courseTime2: CourseTime) => courseTime1.day === courseTime2.day && courseTime1.hour === courseTime2.hour;
-
-export class Student {
-  _id: number;
-  _name: string;
-
-  constructor(id: number, name: string) {
-    this._id = id;
-    this._name = name;
-  }
-}
 
 enum CompletionRequirementsType {
   FinalTest = 'FinalTest',
@@ -77,7 +69,6 @@ export class PointsRequirements implements Requirements {
 
   complete = (): void => {
     runInAction(() => {
-      debugger;
       this.isCompleted = true;
     })
   }
@@ -140,7 +131,7 @@ enum LocationType {
   Remote = 'Remote',
 }
 
-type CourseLocation = {
+export type CourseLocation = {
   locationType: LocationType;
   courseTime: CourseTime;
 }
@@ -160,7 +151,6 @@ export const hasLocation = (course: Course): course is Course & CourseLocation =
 export type Course = {
   id: number;
   name: string;
-  student: Student;
   accepted: boolean;
 
   accept: () => void;
@@ -177,16 +167,14 @@ export class BozpCourse implements Course, Classroom, CourseRequirements<PointsR
   accepted: boolean;
   id: number;
   name: string;
-  student: Student;
   courseTime: CourseTime;
   isCompleted: boolean = false;
 
-  constructor(id: number, name: string, student: Student, accepted: boolean, courseTime: CourseTime, requirements: PointsRequirements) {
+  constructor(id: number, name: string, accepted: boolean, courseTime: CourseTime, requirements: PointsRequirements) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
     this.accepted = accepted;
-    this.student = student;
     this.courseTime = courseTime;
     this.requirements = requirements;
   }
@@ -204,43 +192,12 @@ class EnglishCourse implements Course, Remote, CourseRequirements<FinalTestRequi
   accepted: boolean;
   id: number;
   name: string;
-  student: Student;
   courseTime: CourseTime;
 
-  constructor(id: number, name: string, student: Student, accepted: boolean, courseTime: CourseTime, requirements: FinalTestRequirements) {
+  constructor(id: number, name: string, accepted: boolean, courseTime: CourseTime, requirements: FinalTestRequirements) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
-    this.accepted = accepted;
-    this.student = student;
-    this.courseTime = courseTime;
-    this.requirements = requirements;
-  }
-
-  accept = () => {
-    runInAction(() => {
-      this.accepted = true;
-    })
-  }
-}
-
-class FrenchCourse implements Course, Remote, CourseRequirements<FinalTestRequirements> {
-  locationType: LocationType.Remote = LocationType.Remote;
-  requirements: FinalTestRequirements;
-  hasRequirements: true = true;
-  accepted: boolean;
-  id: number;
-  name: string;
-  student: Student;
-
-  canBeCompleted = true;
-  courseTime: CourseTime;
-
-  constructor(id: number, name: string, student: Student, accepted: boolean, courseTime: CourseTime, requirements: FinalTestRequirements) {
-    makeAutoObservable(this);
-    this.id = id;
-    this.name = name;
-    this.student = student;
     this.accepted = accepted;
     this.courseTime = courseTime;
     this.requirements = requirements;
@@ -259,14 +216,12 @@ class ProgrammingCourse implements Course, Remote, CourseRequirements<WorkRequir
   accepted: boolean;
   id: number;
   name: string;
-  student: Student;
   courseTime: CourseTime;
 
-  constructor(id: number, name: string, student: Student, accepted: boolean, courseTime: CourseTime, requirements: WorkRequirements) {
+  constructor(id: number, name: string, accepted: boolean, courseTime: CourseTime, requirements: WorkRequirements) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
-    this.student = student;
     this.accepted = accepted;
     this.courseTime = courseTime;
     this.requirements = requirements;
@@ -285,13 +240,11 @@ export class DrawingCertification implements Course, CourseRequirements<WorkRequ
   accepted: boolean;
   id: number;
   name: string;
-  student: Student;
 
-  constructor(id: number, name: string, student: Student, accepted: boolean, requirements: WorkRequirements) {
+  constructor(id: number, name: string, accepted: boolean, requirements: WorkRequirements) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
-    this.student = student;
     this.accepted = accepted;
     this.requirements = requirements;
   }
@@ -306,19 +259,17 @@ export class DrawingCertification implements Course, CourseRequirements<WorkRequ
 }
 
 
-class SpeakingInPublicCourse implements Course, Classroom {
+class PublicSpeakingCourse implements Course, Classroom {
   locationType: LocationType.Classroom = LocationType.Classroom;
   accepted: boolean;
   id: number;
   name: string;
-  student: Student;
   courseTime: CourseTime;
 
-  constructor(id: number, name: string, student: Student, accepted: boolean, courseTime: CourseTime) {
+  constructor(id: number, name: string, accepted: boolean, courseTime: CourseTime) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
-    this.student = student;
     this.accepted = accepted;
     this.courseTime = courseTime;
   }
@@ -331,21 +282,22 @@ class SpeakingInPublicCourse implements Course, Classroom {
   }
 }
 
+
+export const isOngoing = (course: Course) => course.accepted && (!hasRequirements(course) || !course.requirements.isCompleted);
+export const needsCompletion = (course: Course) => course.accepted && hasRequirements(course) && !course.requirements.isCompleted;
 export const Courses = new (class {
   public courses: Course[];
 
   constructor() {
     makeAutoObservable(this);
-    const student1 = new Student(1, "Jozko");
-    const student2 = new Student(2, "Ferko");
 
     this.courses = [
-      new BozpCourse(1, "BOZP 1", student1, true, createCourseTime(1, 12), new PointsRequirements(10, 20, false)),
-      new BozpCourse(2, "BOZP 2", student1, false, createCourseTime(1, 12), new PointsRequirements(0, 20, false)),
-      new BozpCourse(3, "BOZP 2", student2, true, createCourseTime(2, 10), new PointsRequirements(5, 20, false)),
-      new EnglishCourse(4, "FCE English", student2, false, createCourseTime(2, 11), new FinalTestRequirements(false)),
-      new ProgrammingCourse(5, "C# Programming", student1, true, createCourseTime(3, 8), new WorkRequirements(false, false)),
-      new SpeakingInPublicCourse(6, "Preparation for conferences", student1, true, createCourseTime(1, 12)),
+      new BozpCourse(1, "BOZP 1", true, createCourseTime(1, 12), new PointsRequirements(10, 20, false)),
+      new BozpCourse(2, "BOZP 2", false, createCourseTime(1, 12), new PointsRequirements(0, 20, false)),
+      new EnglishCourse(4, "FCE English", false, createCourseTime(2, 11), new FinalTestRequirements(false)),
+      new ProgrammingCourse(5, "C# Programming", true, createCourseTime(3, 8), new WorkRequirements(false, false)),
+      new PublicSpeakingCourse(6, "Preparation for conferences", true, createCourseTime(1, 13)),
+      new DrawingCertification(7, "Drawing animals", true, new WorkRequirements(true, false)),
     ]
   }
 })();

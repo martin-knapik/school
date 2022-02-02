@@ -1,4 +1,4 @@
-import { Course, hasLocation, isSameTime } from '../model/Course';
+import { Course, hasLocation, hasRequirements, isSameTime } from '../model/Course';
 
 type ConflictResult = {
   hasConflict: false
@@ -16,7 +16,8 @@ const NoConflict: ConflictResult = {
 }
 
 export const calculateConflict = (course: Course, courses: Course[]): ConflictResult => {
-  if (courses.length === 1) {
+  const noOtherCourses = courses.length === 1;
+  if (noOtherCourses) {
     return NoConflict;
   }
   if (course.accepted) {
@@ -25,7 +26,7 @@ export const calculateConflict = (course: Course, courses: Course[]): ConflictRe
   if (!hasLocation(course)) {
     return NoConflict;
   }
-  const conflictableCourses = courses.filter(otherCourse => course !== otherCourse);
+  const conflictableCourses = courses.filter(otherCourse => course !== otherCourse && otherCourse.accepted && hasRequirements(otherCourse) && !otherCourse.requirements.isCompleted);
   const hasTimeClash = conflictableCourses.some(conflictableCourse => hasLocation(conflictableCourse) && isSameTime(conflictableCourse.courseTime, course.courseTime));
   if (hasTimeClash) {
     return {
