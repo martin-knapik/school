@@ -4,5 +4,6 @@ import { Courses } from '../model/Course';
 import { ListingCourse } from './ListingCourse';
 
 export const CurrentCoursesListing: React.FC = observer(() => {
-  return <div>{Courses.courses.map((course) => (<ListingCourse course={course}/>))}</div>
+  return <div>{Courses.courses.filter(course => course.accepted).map((course) => (
+    <ListingCourse course={course}/>))}</div>
 });
