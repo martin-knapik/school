@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Course, CourseLocation, Courses, DayNumber, Days, hasLocation, isOngoing } from '../model/Course';
 import { calculateTimetable, getAllCoursesInDay } from './calculateTimetable';
+import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 
 const DayNumberToString = (dayNumber: DayNumber): string => {
   switch (dayNumber) {
@@ -23,14 +24,20 @@ export const CoursesTimetable: React.FC = observer(() => {
   const timetable = calculateTimetable(ongoingCourses);
 
   return (
-    <div>
-      {Days.map(day =>
-        <div key={day}>
-          <div>{DayNumberToString(day)}</div>
-          {getAllCoursesInDay(timetable, day).map(course => <div
-            key={course.id}>{course.name}: {course.courseTime.hour}</div>)}
-        </div>)}
-    </div>
+    <Table>
+      <TableBody>
+        {Days.map(day =>
+          <TableRow key={day}>
+            <TableCell>{DayNumberToString(day)}</TableCell>
+            <TableCell>
+              <Table>
+                {getAllCoursesInDay(timetable, day).map(course => <TableRow
+                  key={course.id}>{course.courseTime.hour}:00 {course.name}</TableRow>)}
+              </Table>
+            </TableCell>
+          </TableRow>)}
+      </TableBody>
+    </Table>
   )
 });
 

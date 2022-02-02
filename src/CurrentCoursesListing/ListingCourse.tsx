@@ -1,18 +1,21 @@
 import {
   Course,
+  CourseRequirements,
+  ensureRequirements,
   hasPointsRequirements,
-  hasRequirements,
   hasWorkRequirements
 } from '../model/Course';
 import React from 'react';
 import { observer } from 'mobx-react';
 import { PointRequirementsCompletion } from './PointRequirementsCompletion';
+import { Button, TableCell, TableRow } from '@mui/material';
 
 type ListingCourseProps = {
   course: Course;
 }
 
 export const ListingCourse: React.FC<ListingCourseProps> = observer(({course}) => {
+  ensureRequirements(course);
   const calculateCourseCompletionComponent = () => {
     if (hasPointsRequirements(course)) {
       return <PointRequirementsCompletion course={course}/>
@@ -26,14 +29,12 @@ export const ListingCourse: React.FC<ListingCourseProps> = observer(({course}) =
 
 
   return (
-    <div>
-      <div>{course.name}</div>
-      {hasRequirements(course) && <>
-        <div>{calculateCourseCompletionComponent()}</div>
-        <div>
-          <button disabled={!course.requirements.canBeCompleted} onClick={course.requirements.complete}>Complete</button>
-        </div>
-      </>}
-    </div>
+    <TableRow>
+      <TableCell>{course.name}</TableCell>
+      <TableCell>{calculateCourseCompletionComponent()}</TableCell>
+      <TableCell>
+        <Button disabled={!course.requirements.canBeCompleted} onClick={course.requirements.complete}>Complete</Button>
+      </TableCell>
+    </TableRow>
   )
 });

@@ -100,7 +100,7 @@ export class WorkRequirements implements Requirements {
 
 type AllRequirements = WorkRequirements | PointsRequirements | FinalTestRequirements;
 
-export interface CourseRequirements<T extends AllRequirements> {
+export interface CourseRequirements<T extends AllRequirements = AllRequirements> {
   requirements: T
 }
 
@@ -113,6 +113,12 @@ function hasOwnProperty<X extends object, Y extends string>(
 
 export const hasRequirements = (course: Course): course is Course & CourseRequirements<AllRequirements> => {
   return hasOwnProperty(course, 'requirements');
+}
+
+export function ensureRequirements(course: Course): asserts course is  Course & CourseRequirements {
+  if (!hasRequirements(course)) {
+    throw Error("Assertion exception");
+  }
 }
 
 export const hasPointsRequirements = (course: Course): course is Course & CourseRequirements<PointsRequirements> => {
@@ -298,6 +304,7 @@ export const Courses = new (class {
       new ProgrammingCourse(5, "C# Programming", true, createCourseTime(3, 8), new WorkRequirements(false, false)),
       new PublicSpeakingCourse(6, "Preparation for conferences", true, createCourseTime(1, 13)),
       new DrawingCertification(7, "Drawing animals", true, new WorkRequirements(true, false)),
+      new EnglishCourse(10, "Beginner English", true, createCourseTime(5, 11), new FinalTestRequirements(false)),
     ]
   }
 })();
