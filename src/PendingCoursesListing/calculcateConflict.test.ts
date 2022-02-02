@@ -1,9 +1,16 @@
-import { BozpCourse, createCourseTime, DrawingCertification, isAccepted, Student } from '../model/Course';
+import {
+  BozpCourse,
+  createCourseTime,
+  DrawingCertification,
+  PointsRequirements,
+  Student,
+  WorkRequirements
+} from '../model/Course';
 import { calculateConflict, ConflictType } from './calculateConflict';
 
 describe('calculateConflict', () => {
   const student = new Student(1, 'Jozko');
-  const createCourse = (isAccepted: boolean) => new BozpCourse(1, 'BOZP', student, false, createCourseTime(1, 10), 0, 0);
+  const createCourse = (isAccepted: boolean) => new BozpCourse(1, 'BOZP', student, false, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
   it('if there is only single course, there is no conflict', () => {
     const course = createCourse(false);
     const result = calculateConflict(course, [course]);
@@ -21,7 +28,7 @@ describe('calculateConflict', () => {
 
   it('if course hasnt got location, it cannot have conflict', () => {
     const course = createCourse(true);
-    const locationlessCourse = new DrawingCertification(1, 'Drawing', student, false, false);
+    const locationlessCourse = new DrawingCertification(1, 'Drawing', student, false, new WorkRequirements(false, false));
 
     const result = calculateConflict(locationlessCourse, [locationlessCourse, course]);
 
@@ -29,8 +36,8 @@ describe('calculateConflict', () => {
   })
 
   it('if there already is accepted course at same time, there is conflict', () => {
-    const acceptedCourse = new BozpCourse(1, 'BOZP1', student, true, createCourseTime(1, 10), 0, 0);
-    const conflictedCourse = new BozpCourse(2, 'BOZP2', student, false, createCourseTime(1, 10), 0, 0);
+    const acceptedCourse = new BozpCourse(1, 'BOZP1', student, true, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
+    const conflictedCourse = new BozpCourse(2, 'BOZP2', student, false, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
 
     const result = calculateConflict(conflictedCourse, [acceptedCourse, conflictedCourse]);
 
@@ -41,8 +48,8 @@ describe('calculateConflict', () => {
     expect(result.type).toBe(ConflictType.TimeClash);
   })
   it('if there already is accepted course at same time, but it was completed, there is no conflict', () => {
-    const acceptedCourse = new BozpCourse(1, 'BOZP1', student, true, createCourseTime(1, 10), 0, 0);
-    const conflictedCourse = new BozpCourse(2, 'BOZP2', student, false, createCourseTime(1, 10), 0, 0);
+    const acceptedCourse = new BozpCourse(1, 'BOZP1', student, true, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
+    const conflictedCourse = new BozpCourse(2, 'BOZP2', student, false, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
 
     const result = calculateConflict(conflictedCourse, [acceptedCourse, conflictedCourse]);
 

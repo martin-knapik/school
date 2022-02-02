@@ -19,7 +19,7 @@ export const ListingCourse: React.FC<ListingCourseProps> = observer(({course}) =
     }
     if (hasWorkRequirements(course)) {
       return <div>
-        Work submitted: {course.workSubmitted ? 'Yes' : 'No'}
+        Work submitted: {course.requirements.workSubmitted ? 'Yes' : 'No'}
       </div>
     }
   }
@@ -31,7 +31,7 @@ export const ListingCourse: React.FC<ListingCourseProps> = observer(({course}) =
       {hasRequirements(course) && <>
         <div>{calculateCourseCompletionComponent()}</div>
         <div>
-          <button disabled={!course.canBeCompleted}>Complete</button>
+          <button disabled={!course.requirements.canBeCompleted} onClick={course.requirements.complete}>Complete</button>
         </div>
       </>}
     </div>
