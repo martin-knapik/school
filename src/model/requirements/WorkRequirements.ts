@@ -1,9 +1,15 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { CompletionRequirementsType, CourseRequirements, hasRequirements, Requirements } from './Requirements';
-import { Course } from '../Course';
+import { makeAutoObservable, runInAction } from "mobx";
+import {
+  CompletionRequirementsType,
+  CourseRequirements,
+  hasRequirements,
+  Requirements,
+} from "./Requirements";
+import { Course } from "../Course";
 
 export class WorkRequirements implements Requirements {
-  completionRequirementsType: CompletionRequirementsType.Work = CompletionRequirementsType.Work;
+  completionRequirementsType: CompletionRequirementsType.Work =
+    CompletionRequirementsType.Work;
   workSubmitted: boolean;
   isCompleted: boolean;
 
@@ -21,10 +27,16 @@ export class WorkRequirements implements Requirements {
     runInAction(() => {
       debugger;
       this.isCompleted = true;
-    })
-  }
+    });
+  };
 }
 
-export const hasWorkRequirements = (course: Course): course is Course & CourseRequirements<WorkRequirements> => {
-  return hasRequirements(course) && course.requirements.completionRequirementsType === CompletionRequirementsType.Work;
-}
+export const hasWorkRequirements = (
+  course: Course
+): course is Course & CourseRequirements<WorkRequirements> => {
+  return (
+    hasRequirements(course) &&
+    course.requirements.completionRequirementsType ===
+      CompletionRequirementsType.Work
+  );
+};

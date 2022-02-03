@@ -1,9 +1,15 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { CompletionRequirementsType, CourseRequirements, hasRequirements, Requirements } from './Requirements';
-import { Course } from '../Course';
+import { makeAutoObservable, runInAction } from "mobx";
+import {
+  CompletionRequirementsType,
+  CourseRequirements,
+  hasRequirements,
+  Requirements,
+} from "./Requirements";
+import { Course } from "../Course";
 
 export class FinalTestRequirements implements Requirements {
-  completionRequirementsType: CompletionRequirementsType.FinalTest = CompletionRequirementsType.FinalTest;
+  completionRequirementsType: CompletionRequirementsType.FinalTest =
+    CompletionRequirementsType.FinalTest;
   isCompleted: boolean;
 
   constructor(isCompleted: boolean) {
@@ -16,10 +22,16 @@ export class FinalTestRequirements implements Requirements {
   complete = (): void => {
     runInAction(() => {
       this.isCompleted = true;
-    })
-  }
+    });
+  };
 }
 
-export const hasFinalTestRequirements = (course: Course): course is Course & CourseRequirements<FinalTestRequirements> => {
-  return hasRequirements(course) && course.requirements.completionRequirementsType === CompletionRequirementsType.FinalTest;
-}
+export const hasFinalTestRequirements = (
+  course: Course
+): course is Course & CourseRequirements<FinalTestRequirements> => {
+  return (
+    hasRequirements(course) &&
+    course.requirements.completionRequirementsType ===
+      CompletionRequirementsType.FinalTest
+  );
+};

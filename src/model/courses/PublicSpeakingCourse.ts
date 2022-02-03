@@ -1,7 +1,7 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { Course } from '../Course';
-import { Classroom } from '../locations/Classroom';
-import { CourseLocation } from '../locations/CourseLocation';
+import { makeAutoObservable, runInAction } from "mobx";
+import { Course } from "../Course";
+import { Classroom } from "../locations/Classroom";
+import { CourseLocation } from "../locations/CourseLocation";
 
 export class PublicSpeakingCourse implements Course, CourseLocation<Classroom> {
   accepted: boolean;
@@ -9,7 +9,12 @@ export class PublicSpeakingCourse implements Course, CourseLocation<Classroom> {
   name: string;
   location: Classroom;
 
-  constructor(id: number, name: string, accepted: boolean, location: Classroom) {
+  constructor(
+    id: number,
+    name: string,
+    accepted: boolean,
+    location: Classroom
+  ) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
@@ -17,10 +22,9 @@ export class PublicSpeakingCourse implements Course, CourseLocation<Classroom> {
     this.location = location;
   }
 
-
   accept = () => {
     runInAction(() => {
       this.accepted = true;
-    })
-  }
+    });
+  };
 }

@@ -1,7 +1,12 @@
-import { CourseLocation, hasLocation, LocationBase, LocationType } from './CourseLocation';
-import { CourseTime } from '../CourseTime';
-import { makeAutoObservable } from 'mobx';
-import { Course } from '../Course';
+import {
+  CourseLocation,
+  hasLocation,
+  LocationBase,
+  LocationType,
+} from "./CourseLocation";
+import { CourseTime } from "../CourseTime";
+import { makeAutoObservable } from "mobx";
+import { Course } from "../Course";
 
 export class Classroom implements LocationBase {
   locationType: LocationType.Classroom = LocationType.Classroom;
@@ -15,7 +20,11 @@ export class Classroom implements LocationBase {
   }
 }
 
-
-export function isInClassroom (course: Course): course is Course & CourseLocation<Classroom> {
-  return hasLocation(course) && course.location.locationType === LocationType.Classroom;
+export function isInClassroom(
+  course: Course
+): course is Course & CourseLocation<Classroom> {
+  return (
+    hasLocation(course) &&
+    course.location.locationType === LocationType.Classroom
+  );
 }

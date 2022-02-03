@@ -1,7 +1,12 @@
-import { CourseLocation, hasLocation, LocationBase, LocationType } from './CourseLocation';
-import { CourseTime } from '../CourseTime';
-import { makeAutoObservable } from 'mobx';
-import { Course } from '../Course';
+import {
+  CourseLocation,
+  hasLocation,
+  LocationBase,
+  LocationType,
+} from "./CourseLocation";
+import { CourseTime } from "../CourseTime";
+import { makeAutoObservable } from "mobx";
+import { Course } from "../Course";
 
 export class Remote implements LocationBase {
   locationType: LocationType.Remote = LocationType.Remote;
@@ -15,6 +20,10 @@ export class Remote implements LocationBase {
   }
 }
 
-export function isRemote (course: Course): course is Course & CourseLocation<Remote> {
-  return hasLocation(course) && course.location.locationType === LocationType.Remote;
+export function isRemote(
+  course: Course
+): course is Course & CourseLocation<Remote> {
+  return (
+    hasLocation(course) && course.location.locationType === LocationType.Remote
+  );
 }

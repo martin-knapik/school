@@ -1,18 +1,29 @@
-import { makeAutoObservable, runInAction } from 'mobx';
-import { Course } from '../Course';
-import { Remote } from '../locations/Remote';
-import { CourseLocation } from '../locations/CourseLocation';
-import { CourseRequirements } from '../requirements/Requirements';
-import { WorkRequirements } from '../requirements/WorkRequirements';
+import { makeAutoObservable, runInAction } from "mobx";
+import { Course } from "../Course";
+import { Remote } from "../locations/Remote";
+import { CourseLocation } from "../locations/CourseLocation";
+import { CourseRequirements } from "../requirements/Requirements";
+import { WorkRequirements } from "../requirements/WorkRequirements";
 
-export class ProgrammingCourse implements Course, CourseLocation<Remote>, CourseRequirements<WorkRequirements> {
+export class ProgrammingCourse
+  implements
+    Course,
+    CourseLocation<Remote>,
+    CourseRequirements<WorkRequirements>
+{
   requirements: WorkRequirements;
   accepted: boolean;
   id: number;
   location: Remote;
   name: string;
 
-  constructor(id: number, name: string, accepted: boolean, requirements: WorkRequirements, location: Remote) {
+  constructor(
+    id: number,
+    name: string,
+    accepted: boolean,
+    requirements: WorkRequirements,
+    location: Remote
+  ) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
@@ -24,6 +35,6 @@ export class ProgrammingCourse implements Course, CourseLocation<Remote>, Course
   accept = () => {
     runInAction(() => {
       this.accepted = true;
-    })
-  }
+    });
+  };
 }
