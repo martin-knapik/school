@@ -10,10 +10,10 @@ type CourseLocationProps = {
 
 export const CourseLocation: React.FC<CourseLocationProps> = ({course}) => {
   if (isRemote(course)) {
-    return <Link href={course.location.meetingUrl}>{course.location.meetingUrl}</Link>;
+    return <span>(<Link href={course.location.meetingUrl}>{course.location.meetingUrl}</Link>)</span>;
   }
   if (isInClassroom(course)) {
-    return <span>Room {course.location.room}</span>;
+    return <span>(Room {course.location.room})</span>;
   }
 
   return null;
