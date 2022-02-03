@@ -1,28 +1,26 @@
-import { CourseTime } from '../CourseTime';
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Course } from '../Course';
-import { LocationType } from '../locations/Location';
+import { CourseLocation } from '../locations/CourseLocation';
 import { Classroom } from '../locations/Classroom';
-import { CourseRequirements} from '../requirements/Requirements';
+import { CourseRequirements } from '../requirements/Requirements';
 import { PointsRequirements } from '../requirements/PointsRequirements';
 
-export class BozpCourse implements Course, Classroom, CourseRequirements<PointsRequirements> {
-  locationType: LocationType.Classroom = LocationType.Classroom;
+export class BozpCourse implements Course, CourseLocation<Classroom>, CourseRequirements<PointsRequirements> {
+  location: Classroom;
   requirements: PointsRequirements;
 
   accepted: boolean;
   id: number;
   name: string;
-  courseTime: CourseTime;
   isCompleted: boolean = false;
 
-  constructor(id: number, name: string, accepted: boolean, courseTime: CourseTime, requirements: PointsRequirements) {
+  constructor(id: number, name: string, accepted: boolean, requirements: PointsRequirements, location: Classroom) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
     this.accepted = accepted;
-    this.courseTime = courseTime;
     this.requirements = requirements;
+    this.location = location;
   }
 
   accept = () => {

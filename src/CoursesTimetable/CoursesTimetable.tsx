@@ -5,7 +5,8 @@ import { calculateTimetable, getAllCoursesInDay } from './calculateTimetable';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
 import { Courses } from '../store/Courses';
 import { DayNumber, Days } from '../model/CourseTime';
-import { CourseLocation, hasLocation } from '../model/locations/Location';
+import { CourseLocation as CourseLocationModel, hasLocation } from '../model/locations/CourseLocation';
+import { CourseLocation } from './CourseLocation';
 
 const DayNumberToString = (dayNumber: DayNumber): string => {
   switch (dayNumber) {
@@ -23,7 +24,7 @@ const DayNumberToString = (dayNumber: DayNumber): string => {
 }
 
 export const CoursesTimetable: React.FC = observer(() => {
-  const ongoingCourses = Courses.courses.filter((course) => isOngoing(course) && hasLocation(course)) as (Course & CourseLocation)[];
+  const ongoingCourses = Courses.courses.filter((course) => isOngoing(course) && hasLocation(course)) as (Course & CourseLocationModel)[];
   const timetable = calculateTimetable(ongoingCourses);
 
   return (
@@ -35,7 +36,8 @@ export const CoursesTimetable: React.FC = observer(() => {
             <TableCell>
               <Table>
                 {getAllCoursesInDay(timetable, day).map(course => <TableRow
-                  key={course.id}>{course.courseTime.hour}:00 {course.name}</TableRow>)}
+                  key={course.id}>{course.location.courseTime.hour}:00 {course.name} <CourseLocation
+                  course={course}/></TableRow>)}
               </Table>
             </TableCell>
           </TableRow>)}

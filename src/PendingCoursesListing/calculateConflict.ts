@@ -1,6 +1,6 @@
 import { Course} from '../model/Course';
 import { isSameTime } from '../model/CourseTime';
-import { hasLocation } from '../model/locations/Location';
+import { hasLocation } from '../model/locations/CourseLocation';
 import { hasRequirements } from '../model/requirements/Requirements';
 
 type ConflictResult = {
@@ -30,7 +30,7 @@ export const calculateConflict = (course: Course, courses: Course[]): ConflictRe
     return NoConflict;
   }
   const conflictableCourses = courses.filter(otherCourse => course !== otherCourse && otherCourse.accepted && hasRequirements(otherCourse) && !otherCourse.requirements.isCompleted);
-  const hasTimeClash = conflictableCourses.some(conflictableCourse => hasLocation(conflictableCourse) && isSameTime(conflictableCourse.courseTime, course.courseTime));
+  const hasTimeClash = conflictableCourses.some(conflictableCourse => hasLocation(conflictableCourse) && isSameTime(conflictableCourse.location.courseTime, course.location.courseTime));
   if (hasTimeClash) {
     return {
       hasConflict: true,

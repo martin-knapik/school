@@ -2,6 +2,7 @@ import { calculateTimetable, getAllCoursesInDay } from './calculateTimetable';
 import { createCourseTime, DayNumber } from '../model/CourseTime';
 import { BozpCourse } from '../model/courses/BozpCourse';
 import { PointsRequirements } from '../model/requirements/PointsRequirements';
+import { Classroom } from '../model/locations/Classroom';
 
 describe('calculateTimetable', () => {
   it('for empty courses returns empty timetable', () => {
@@ -15,7 +16,7 @@ describe('calculateTimetable', () => {
   })
   it('for single ongoing course returns timetable with course in given day', () => {
     const day = 1;
-    const course = new BozpCourse(1, 'BOZP', true, createCourseTime(day, 12), new PointsRequirements(0, 20, false))
+    const course = new BozpCourse(1, 'BOZP', true, new PointsRequirements(0, 20, false), new Classroom(createCourseTime(day, 12), 'random'))
     const result = calculateTimetable([course]);
 
     const coursesInMonday = getAllCoursesInDay(result, 1);
@@ -28,7 +29,7 @@ describe('calculateTimetable', () => {
   })
   it('for multiple ongoing courses in same day returns timetable with courses in given day, sorted by hour', () => {
     const day = 1;
-    const createCourse = (hour: number) => new BozpCourse(1, 'BOZP', true, createCourseTime(day, hour), new PointsRequirements(0, 20, false))
+    const createCourse = (hour: number) => new BozpCourse(1, 'BOZP', true, new PointsRequirements(0, 20, false), new Classroom(createCourseTime(day, hour), 'random'))
     const courseAt8 = createCourse(8);
     const courseAt10 = createCourse(10);
     const courseAt15 = createCourse(15);
@@ -45,7 +46,7 @@ describe('calculateTimetable', () => {
     expect(getAllCoursesInDay(result, 5).length).toBe(0);
   })
   it('for multiple ongoing courses in various days returns timetable with course in given days', () => {
-    const createCourse = (day: DayNumber) => new BozpCourse(1, 'BOZP', true, createCourseTime(day, 8), new PointsRequirements(0, 20, false))
+    const createCourse = (day: DayNumber) => new BozpCourse(1, 'BOZP', true, new PointsRequirements(0, 20, false), new Classroom(createCourseTime(day, 8), "random" ))
     const mondayCourse = createCourse(1);
     const tuesdayCourse = createCourse(2);
     const fridayCourse = createCourse(5);

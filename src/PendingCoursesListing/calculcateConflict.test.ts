@@ -5,9 +5,10 @@ import { BozpCourse } from '../model/courses/BozpCourse';
 import { Requirements } from '../model/requirements/Requirements';
 import { WorkRequirements } from '../model/requirements/WorkRequirements';
 import { PointsRequirements } from '../model/requirements/PointsRequirements';
+import { Classroom } from '../model/locations/Classroom';
 
 describe('calculateConflict', () => {
-  const createCourse = (isAccepted: boolean) => new BozpCourse(1, 'BOZP', isAccepted, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
+  const createCourse = (isAccepted: boolean) => new BozpCourse(1, 'BOZP', isAccepted, new PointsRequirements(0, 0, false), new Classroom(createCourseTime(1, 10), "random"));
   it('if there is only single course, there is no conflict', () => {
     const course = createCourse(false);
     const result = calculateConflict(course, [course]);
@@ -34,8 +35,8 @@ describe('calculateConflict', () => {
   })
 
   it('if there already is accepted course at same time, there is conflict', () => {
-    const acceptedCourse = new BozpCourse(1, 'BOZP1', true, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
-    const conflictedCourse = new BozpCourse(2, 'BOZP2', false, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
+    const acceptedCourse = new BozpCourse(1, 'BOZP1', true, new PointsRequirements(0, 0, false), new Classroom(createCourseTime(1, 10), "random"));
+    const conflictedCourse = new BozpCourse(2, 'BOZP2', false, new PointsRequirements(0, 0, false), new Classroom(createCourseTime(1, 10), "random"));
 
     const result = calculateConflict(conflictedCourse, [acceptedCourse, conflictedCourse]);
 
@@ -46,8 +47,8 @@ describe('calculateConflict', () => {
     expect(result.type).toBe(ConflictType.TimeClash);
   })
   it('if there already is accepted course at same time, but it was completed, there is no conflict', () => {
-    const completedCourse = new BozpCourse(1, 'BOZP1', true, createCourseTime(1, 10), new PointsRequirements(0, 0, true));
-    const course = new BozpCourse(2, 'BOZP2', false, createCourseTime(1, 10), new PointsRequirements(0, 0, false));
+    const completedCourse = new BozpCourse(1, 'BOZP1', true, new PointsRequirements(0, 0, true), new Classroom(createCourseTime(1, 10), "random"));
+    const course = new BozpCourse(2, 'BOZP2', false, new PointsRequirements(0, 0, false), new Classroom(createCourseTime(1, 10), "random"));
 
     const result = calculateConflict(course, [completedCourse, course]);
 

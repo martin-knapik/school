@@ -1,22 +1,20 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { Course } from '../Course';
 import { Classroom } from '../locations/Classroom';
-import { LocationType } from '../locations/Location';
-import { CourseTime } from '../CourseTime';
+import { CourseLocation } from '../locations/CourseLocation';
 
-export class PublicSpeakingCourse implements Course, Classroom {
-  locationType: LocationType.Classroom = LocationType.Classroom;
+export class PublicSpeakingCourse implements Course, CourseLocation<Classroom> {
   accepted: boolean;
   id: number;
   name: string;
-  courseTime: CourseTime;
+  location: Classroom;
 
-  constructor(id: number, name: string, accepted: boolean, courseTime: CourseTime) {
+  constructor(id: number, name: string, accepted: boolean, location: Classroom) {
     makeAutoObservable(this);
     this.id = id;
     this.name = name;
     this.accepted = accepted;
-    this.courseTime = courseTime;
+    this.location = location;
   }
 
 

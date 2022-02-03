@@ -1,6 +1,6 @@
-import { Course} from '../model/Course';
+import { Course } from '../model/Course';
 import { DayNumber } from '../model/CourseTime';
-import { CourseLocation, hasLocation } from '../model/locations/Location';
+import { CourseLocation, hasLocation } from '../model/locations/CourseLocation';
 
 type CourseInDay = {
   dayNumber: DayNumber;
@@ -27,8 +27,8 @@ export const calculateTimetable = (courses: Course[]): Timetable => {
       if (!hasLocation(course)) {
         return acc;
       }
-      const dayIndex = course.courseTime.day - 1;
-      acc[dayIndex].courses = [...acc[dayIndex].courses, course].sort((a, b) => a.courseTime.hour - b.courseTime.hour);
+      const dayIndex = course.location.courseTime.day - 1;
+      acc[dayIndex].courses = [...acc[dayIndex].courses, course].sort((a, b) => a.location.courseTime.hour - b.location.courseTime.hour);
       return acc;
     }, createEmptyCoursesByDay())
   }
