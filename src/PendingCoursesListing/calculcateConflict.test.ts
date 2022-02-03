@@ -1,11 +1,10 @@
-import {
-  BozpCourse,
-  createCourseTime,
-  DrawingCertification,
-  PointsRequirements,
-  WorkRequirements
-} from '../model/Course';
 import { calculateConflict, ConflictType } from './calculateConflict';
+import { DrawingCertification } from '../model/courses/DrawingCertification';
+import { createCourseTime } from '../model/CourseTime';
+import { BozpCourse } from '../model/courses/BozpCourse';
+import { Requirements } from '../model/requirements/Requirements';
+import { WorkRequirements } from '../model/requirements/WorkRequirements';
+import { PointsRequirements } from '../model/requirements/PointsRequirements';
 
 describe('calculateConflict', () => {
   const createCourse = (isAccepted: boolean) => new BozpCourse(1, 'BOZP', isAccepted, createCourseTime(1, 10), new PointsRequirements(0, 0, false));

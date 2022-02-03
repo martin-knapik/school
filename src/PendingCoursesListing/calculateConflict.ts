@@ -1,4 +1,7 @@
-import { Course, hasLocation, hasRequirements, isSameTime } from '../model/Course';
+import { Course} from '../model/Course';
+import { isSameTime } from '../model/CourseTime';
+import { hasLocation } from '../model/locations/Location';
+import { hasRequirements } from '../model/requirements/Requirements';
 
 type ConflictResult = {
   hasConflict: false

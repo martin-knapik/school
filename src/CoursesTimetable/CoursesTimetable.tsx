@@ -1,8 +1,11 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Course, CourseLocation, Courses, DayNumber, Days, hasLocation, isOngoing } from '../model/Course';
+import { Course, isOngoing } from '../model/Course';
 import { calculateTimetable, getAllCoursesInDay } from './calculateTimetable';
 import { Table, TableBody, TableCell, TableRow } from '@mui/material';
+import { Courses } from '../store/Courses';
+import { DayNumber, Days } from '../model/CourseTime';
+import { CourseLocation, hasLocation } from '../model/locations/Location';
 
 const DayNumberToString = (dayNumber: DayNumber): string => {
   switch (dayNumber) {

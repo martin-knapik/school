@@ -1,7 +1,8 @@
-import { CourseRequirements, PointsRequirements } from '../model/Course';
 import React, { useState } from 'react';
 import { observer } from 'mobx-react';
 import { Button, Input } from '@mui/material';
+import { CourseRequirements } from '../model/requirements/Requirements';
+import { PointsRequirements } from '../model/requirements/PointsRequirements';
 
 type PointRequirementsCompletionProps = {
   course: CourseRequirements<PointsRequirements>;

@@ -1,14 +1,11 @@
-import {
-  Course,
-  CourseRequirements,
-  ensureRequirements,
-  hasPointsRequirements,
-  hasWorkRequirements
-} from '../model/Course';
+import { Course } from '../model/Course';
 import React from 'react';
 import { observer } from 'mobx-react';
 import { PointRequirementsCompletion } from './PointRequirementsCompletion';
 import { Button, TableCell, TableRow } from '@mui/material';
+import { ensureRequirements } from '../model/requirements/Requirements';
+import { hasPointsRequirements } from '../model/requirements/PointsRequirements';
+import { hasWorkRequirements } from '../model/requirements/WorkRequirements';
 
 type ListingCourseProps = {
   course: Course;

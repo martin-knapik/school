@@ -1,4 +1,6 @@
-import { Course, CourseLocation, DayNumber, hasLocation } from '../model/Course';
+import { Course} from '../model/Course';
+import { DayNumber } from '../model/CourseTime';
+import { CourseLocation, hasLocation } from '../model/locations/Location';
 
 type CourseInDay = {
   dayNumber: DayNumber;

@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { observer } from 'mobx-react';
-import { Courses, needsCompletion } from '../model/Course';
+import { needsCompletion } from '../model/Course';
 import { ListingCourse } from './ListingCourse';
 import { TableBody, TableContainer } from '@mui/material';
+import { Courses } from '../store/Courses';
 
 export const CoursesCompletionListing: React.FC = observer(() => {
   return <TableContainer>

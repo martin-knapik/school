@@ -1,8 +1,8 @@
 import React from 'react';
 import { observer } from 'mobx-react';
-import { Courses } from '../model/Course';
 import { calculateConflict, ConflictType } from './calculateConflict';
 import { Button, styled, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
+import { Courses } from '../store/Courses';
 
 const Warning = styled(Typography)(({theme}) => ({
   color: theme.palette.warning.main

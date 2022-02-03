@@ -1,5 +1,7 @@
 import { calculateTimetable, getAllCoursesInDay } from './calculateTimetable';
-import { BozpCourse, createCourseTime, DayNumber, PointsRequirements } from '../model/Course';
+import { createCourseTime, DayNumber } from '../model/CourseTime';
+import { BozpCourse } from '../model/courses/BozpCourse';
+import { PointsRequirements } from '../model/requirements/PointsRequirements';
 
 describe('calculateTimetable', () => {
   it('for empty courses returns empty timetable', () => {
