@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { observer } from 'mobx-react';
 import { Course, isOngoing } from '../model/Course';
 import { calculateTimetable, getAllCoursesInDay } from './calculateTimetable';
@@ -25,7 +25,9 @@ const DayNumberToString = (dayNumber: DayNumber): string => {
 
 export const CoursesTimetable: React.FC = observer(() => {
   const ongoingCourses = Courses.courses.filter((course) => isOngoing(course) && hasLocation(course)) as (Course & CourseLocationModel)[];
-  const timetable = calculateTimetable(ongoingCourses);
+  const timetable = useMemo(() => {
+    return calculateTimetable(ongoingCourses);
+  }, [ongoingCourses]);
 
   return (
     <Table>
